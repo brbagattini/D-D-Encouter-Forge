@@ -246,20 +246,29 @@ const dificuldadeFinal = Math.min(Math.round(dificuldadeBase * rollModifier * 10
   } else {
     dificuldadeTexto = "💀 Insanamente Mortal";
   }
-
-  // Mostrar resultado
-  const resultado = `
-    Ideia: ${ideiaText}
-    \nAmbiente: ${ambienteText}
-    \nNível dos Jogadores: ${lvlJogador}
-    \nRoll20: ${roll20} → ${interpretacaoRoll}
-    \n💥 Dificuldade Final: ${dificuldadeFinal}/2500 → ${dificuldadeTexto}
-  `;
+      const variacaoPercentual = Math.random() * 1 - 0.5;
+      const grupoReal = Math.round(lvlJogador + (lvlJogador * variacaoPercentual));
   
-  document.getElementById("resultado").innerText = resultado;
+      const monstros = sugerirMonstros(parseFloat(dificuldadeFinal), ambienteText, lvlJogador, ideiaText);
+  
+      let resultadoTexto = `
+Ideia: ${ideiaText}
+Ambiente: ${ambienteText}
+Dificuldade Base: ${dificuldadeBase}
+Roll20: ${roll20} → ${interpretacaoRoll}
+💥 Dificuldade Final: ${dificuldadeFinal}/2500 → ${dificuldadeTexto}
+`;
 
-  // Aqui segue o código de sorteio dos monstros...
-}
+  
+      if (monstros.length > 0) {
+        resultadoTexto += `\n👹 Opções de Monstro:\n`;
+        monstros.forEach((m, i) => {
+          const qtd = Math.floor(Math.random() * (m.max - m.min + 1)) + m.min;
+          resultadoTexto += `${i + 1}. ${m.nome} (x${qtd})\n`;
+        });
+      }
+      document.getElementById("resultado").innerText = resultadoTexto;
+    }
   </script>
   
 </body>
