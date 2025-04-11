@@ -25,11 +25,3 @@ Este projeto utiliza conteúdo e inspiração de diversas fontes, respeitando se
 - Criado manualmente com foco em performance, leveza e usabilidade para mestres e jogadores de RPG.
 
 ---
-
-## 🙏 Agradecimentos
-
-- À comunidade de D&D por manter a chama da criatividade acesa 🔥
-- Aos desenvolvedores de ferramentas de código aberto que tornam isso possível
-- À Wizards of the Coast por abrir o SRD 5.1 e permitir criações incríveis como esta
-
----
