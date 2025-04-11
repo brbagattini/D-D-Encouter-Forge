@@ -172,6 +172,9 @@
   <label for="Roll20">Roll20:</label>
   <input type="number" id="Roll20" placeholder="Digite um número de 1 a 20">
 
+  <label for="QtdJogadores">Quantidade de Jogadores:</label>
+  <input type="number" id="QtdJogadores" placeholder="Quantos jogadores no grupo?">
+
   <label for="LvlJogador">Level dos Jogadores:</label>
   <input type="number" id="LvlJogador" placeholder="Digite o level médio">
 
@@ -187,53 +190,53 @@ function salvarDados() {
   const dificuldadeBase = parseFloat(document.getElementById("Dificuldade").value);
   const roll20 = parseInt(document.getElementById("Roll20").value);
   const lvlJogador = parseInt(document.getElementById("LvlJogador").value);
+  const qtdJogadores = parseInt(document.getElementById("QtdJogadores").value);
 
   const ideiaText = ideia.options[ideia.selectedIndex].text;
   const ambienteText = ambiente.options[ambiente.selectedIndex].text;
 
-  // 🎲 Interpretação do dado
+  // 🎲 Modificador por valor exato de dado
   function getRollModifier(roll) {
-  const modifiers = {
-    1: 2.5,
-    2: 1.8,
-    3: 1.7,
-    4: 1.6,
-    5: 1.5,
-    6: 1.3,
-    7: 1.2,
-    8: 1.1,
-    9: 1.0,
-    10: 1.0,
-    11: 1.0,
-    12: 1.0,
-    13: 1.0,
-    14: 0.95,
-    15: 0.9,
-    16: 0.8,
-    17: 0.7,
-    18: 0.6,
-    19: 0.5,
-    20: 0.25
-  };
+    const modifiers = {
+      1: 2.5,
+      2: 1.8,
+      3: 1.7,
+      4: 1.6,
+      5: 1.5,
+      6: 1.3,
+      7: 1.2,
+      8: 1.1,
+      9: 1.0,
+      10: 1.0,
+      11: 1.0,
+      12: 1.0,
+      13: 1.0,
+      14: 0.95,
+      15: 0.9,
+      16: 0.8,
+      17: 0.7,
+      18: 0.6,
+      19: 0.5,
+      20: 0.25
+    };
+    return modifiers[roll] || 1.0;
+  }
 
-  return modifiers[roll] || 1.0;
-}
+  function getRollLabel(roll) {
+    if (roll === 1) return "🎲 Falha Crítica";
+    if (roll >= 2 && roll <= 6) return "⚠️ Falha Parcial";
+    if (roll >= 7 && roll <= 14) return "😐 Resultado Neutro";
+    if (roll >= 15 && roll <= 19) return "✅ Sucesso Parcial";
+    if (roll === 20) return "🌟 Sucesso Crítico";
+    return "⛔ Valor Inválido";
+  }
 
-function getRollLabel(roll) {
-  if (roll === 1) return "🎲 Falha Crítica";
-  if (roll >= 2 && roll <= 6) return "⚠️ Falha parcial";
-  if (roll >= 7 && roll <= 14) return "😐 Resultado Neutro";
-  if (roll >= 15 && roll <= 19) return "✅ Sucesso Parcial";
-  if (roll === 20) return "🙏 Sucesso Critico";
-  return "⛔ Valor inválido";
-}
+  const rollModifier = getRollModifier(roll20);
+  const interpretacaoRoll = getRollLabel(roll20);
 
-const rollModifier = getRollModifier(roll20);
-const interpretacaoRoll = getRollLabel(roll20);
+  const dificuldadeFinal = Math.min(Math.round(dificuldadeBase * rollModifier * 100), 2500);
 
-const dificuldadeFinal = Math.min(Math.round(dificuldadeBase * rollModifier * 100));
-
-  // 💡 Faixa textual da dificuldade
+  // 💡 Texto da dificuldade final
   let dificuldadeTexto;
   if (dificuldadeFinal <= 100) {
     dificuldadeTexto = "😴 Ameaça Nula";
@@ -246,30 +249,54 @@ const dificuldadeFinal = Math.min(Math.round(dificuldadeBase * rollModifier * 10
   } else {
     dificuldadeTexto = "💀 Ameaça Extrema";
   }
-      const variacaoPercentual = Math.random() * 1 - 0.5;
-      const grupoReal = Math.round(lvlJogador + (lvlJogador * variacaoPercentual));
-  
-      const monstros = sugerirMonstros(parseFloat(dificuldadeFinal), ambienteText, lvlJogador, ideiaText);
-  
-      let resultadoTexto = `
+
+  // 🔢 Cálculo da percepção de perigo pelo grupo
+  const fatorGrupo = lvlJogador * qtdJogadores * 50;
+  const perigoParcial = dificuldadeFinal / (fatorGrupo || 1);
+
+  let percepcaoJogador;
+  if (perigoParcial < 1.0) {
+    percepcaoJogador = "😌 Encontro Dominado";
+  } else if (perigoParcial < 2.0) {
+    percepcaoJogador = "🧠 Equilíbrio de Poder";
+  } else if (perigoParcial < 3.0) {
+    percepcaoJogador = "⚠️ Desafio Notável";
+  } else if (perigoParcial < 4.0) {
+    percepcaoJogador = "🔥 Ameaça Grave";
+  } else {
+    percepcaoJogador = "☠️ Risco de Extinção";
+  }
+
+  // 🎲 Grupo real com variação
+  const variacaoPercentual = Math.random() * 1 - 0.5;
+  const grupoReal = Math.round(lvlJogador + (lvlJogador * variacaoPercentual));
+
+  // 🧙‍♂️ Buscar monstros (função externa)
+  const monstros = sugerirMonstros(parseFloat(dificuldadeFinal), ambienteText, lvlJogador, ideiaText);
+
+  // 📄 Exibir resultado
+  let resultadoTexto = `
 Ideia: ${ideiaText}
 Ambiente: ${ambienteText}
+Nível Médio: ${lvlJogador}
+Quantidade de Jogadores: ${qtdJogadores}
 Dificuldade Base: ${dificuldadeBase}
 Roll20: ${roll20} → ${interpretacaoRoll}
 💥 Dificuldade Final: ${dificuldadeFinal}/2500 → ${dificuldadeTexto}
-`;
+🧠 Visão do Grupo: ${percepcaoJogador}
+  `;
 
-  
-      if (monstros.length > 0) {
-        resultadoTexto += `\n👹 Opções de Monstro:\n`;
-        monstros.forEach((m, i) => {
-          const qtd = Math.floor(Math.random() * (m.max - m.min + 1)) + m.min;
-          resultadoTexto += `${i + 1}. ${m.nome} (x${qtd})\n`;
-        });
-      }
-      document.getElementById("resultado").innerText = resultadoTexto;
-    }
-  </script>
+  if (monstros.length > 0) {
+    resultadoTexto += `\n👹 Opções de Monstro:\n`;
+    monstros.forEach((m, i) => {
+      const qtd = Math.floor(Math.random() * (m.max - m.min + 1)) + m.min;
+      resultadoTexto += `${i + 1}. ${m.nome} (x${qtd})\n`;
+    });
+  }
+
+  document.getElementById("resultado").innerText = resultadoTexto;
+}
+</script>
   
 </body>
 </html>
