@@ -1,31 +1,37 @@
-# 🐉 D&D Encounter Forge
+---
 
-**D&D Encounter Forge** é um gerador de encontros interativo para campanhas de Dungeons & Dragons 5ª Edição. Ele oferece sugestões de criaturas com base no ambiente, dificuldade, ideia do encontro e nível médio dos jogadores. Feito para mestres que querem improviso com inteligência e velocidade.
+## 📚 Referências e Créditos
+
+Este projeto utiliza conteúdo e inspiração de diversas fontes, respeitando seus termos de uso e licenças:
+
+### 📘 Sistema de Regras & Criaturas
+
+- Este projeto se baseia em material compatível com **Dungeons & Dragons 5ª Edição**.
+- Alguns nomes de criaturas, tipos e conceitos foram inspirados ou derivados do **System Reference Document (SRD) 5.1**, publicado pela **Wizards of the Coast** sob a licença:
+
+  > **Open Game License v1.0a (OGL)**  
+  > Leia a licença completa aqui: [https://media.wizards.com/2016/downloads/DND/OGLv1.1.pdf](https://media.wizards.com/2016/downloads/DND/OGLv1.1.pdf)
+
+- Este projeto **não contém textos oficiais dos livros**, apenas referências e categorização de criaturas baseadas em interpretação e resumos de regras disponíveis publicamente.
+
+- **Dungeons & Dragons**, **D&D**, **Wizards of the Coast**, e todos os nomes associados são marcas registradas de seus respectivos detentores. Este projeto é uma ferramenta de fã e **não possui nenhuma afiliação oficial**.
+
+### 🔤 Tipografia
+
+- Este projeto utiliza a fonte **[MedievalSharp](https://fonts.google.com/specimen/MedievalSharp)** da **Google Fonts**.
+  - Licenciada sob a **[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)**.
+
+### 🛠️ Tecnologias
+
+- Desenvolvido com **HTML5**, **CSS3** e **JavaScript Vanilla**.
+- Criado manualmente com foco em performance, leveza e usabilidade para mestres e jogadores de RPG.
 
 ---
 
-## ✨ Funcionalidades
+## 🙏 Agradecimentos
 
-- Escolha de **ambiente**, **ideia de encontro**, **nível dos jogadores** e um valor de "roll20".
-- Cálculo da **dificuldade real do encontro**, com interpretação divertida.
-- Sugestão automática de até **3 monstros**, compatíveis com a situação.
-- Geração dinâmica da **quantidade de criaturas** (com variação aleatória).
-- Filtro inteligente baseado no **tipo de criatura (ideia)**.
-- Baseado em mais de **250 monstros** extraídos de um bestiário completo!
+- À comunidade de D&D por manter a chama da criatividade acesa 🔥
+- Aos desenvolvedores de ferramentas de código aberto que tornam isso possível
+- À Wizards of the Coast por abrir o SRD 5.1 e permitir criações incríveis como esta
 
 ---
-
-## 📚 Base de Dados
-
-As criaturas utilizadas no projeto foram extraídas de um compêndio de monstros baseado no livro:
-
-> **"Livro de Criaturas para D&D 5e"** – PDF de referência contendo centenas de monstros categorizados por tipo, dificuldade e ambiente.
-
-O sistema atualmente reconhece mais de **250 criaturas únicas**, com diferentes combinações de:
-
-- Nome
-- Tipo (humanoide, morto-vivo, elemental, etc.)
-- Faixa de quantidade por encontro
-- Ambientes onde aparecem
-- Nível mínimo recomendado
-- Faixa de dificuldade (CR)
