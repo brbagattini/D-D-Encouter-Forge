@@ -220,11 +220,11 @@ function salvarDados() {
 }
 
 function getRollLabel(roll) {
-  if (roll === 1) return "🎲 Fudeu Crítico";
-  if (roll >= 2 && roll <= 5) return "⚠️ Fudeu";
-  if (roll >= 6 && roll <= 15) return "😐 Okay";
-  if (roll >= 16 && roll <= 19) return "✅ Boa";
-  if (roll === 20) return "🙏 Amém";
+  if (roll === 1) return "🎲 Falha Crítica";
+  if (roll >= 2 && roll <= 6) return "⚠️ Falha parcial";
+  if (roll >= 7 && roll <= 14) return "😐 Resultado Neutro";
+  if (roll >= 15 && roll <= 19) return "✅ Sucesso Parcial";
+  if (roll === 20) return "🙏 Sucesso Critico";
   return "⛔ Valor inválido";
 }
 
@@ -236,15 +236,15 @@ const dificuldadeFinal = Math.min(Math.round(dificuldadeBase * rollModifier * 10
   // 💡 Faixa textual da dificuldade
   let dificuldadeTexto;
   if (dificuldadeFinal <= 100) {
-    dificuldadeTexto = "😴 Muito Fácil";
+    dificuldadeTexto = "😴 Ameaça Nula";
   } else if (dificuldadeFinal <= 300) {
-    dificuldadeTexto = "🟢 Tranquilo";
+    dificuldadeTexto = "🟢 Encontro de Baixo Risco";
   } else if (dificuldadeFinal <= 600) {
-    dificuldadeTexto = "🟡 Desafiador";
+    dificuldadeTexto = "🟡 Encontro Desafiador";
   } else if (dificuldadeFinal <= 850) {
-    dificuldadeTexto = "🔴 Tenso";
+    dificuldadeTexto = "🔴 Encontro de Alto Risco";
   } else {
-    dificuldadeTexto = "💀 Insanamente Mortal";
+    dificuldadeTexto = "💀 Ameaça Extrema";
   }
       const variacaoPercentual = Math.random() * 1 - 0.5;
       const grupoReal = Math.round(lvlJogador + (lvlJogador * variacaoPercentual));
