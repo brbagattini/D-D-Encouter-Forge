@@ -1,5 +1,3 @@
----
-
 ## 📚 Referências e Créditos
 
 Este projeto utiliza conteúdo e inspiração de diversas fontes, respeitando seus termos de uso e licenças:
