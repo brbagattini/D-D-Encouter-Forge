@@ -161,19 +161,14 @@
 
   <label for="Dificuldade">Dificuldade:</label>
   <select id="Dificuldade">
-    <option value="0.25">Muito Fácil</option>
-    <option value="0.5">Fácil</option>
-    <option value="0.75">Levemente Desafiador</option>
-    <option value="1">Médio</option>
-    <option value="1.25">Moderadamente Difícil</option>
-    <option value="1.5">Difícil</option>
-    <option value="1.75">Muito Difícil</option>
-    <option value="2">Mortal</option>
-    <option value="2.25">Extremamente Mortal</option>
-    <option value="2.5">Quase Impossível</option>
-    <option value="3">Insanamente Letal</option>
+    <option value="1">Muito Fácil</option>
+    <option value="2">Fácil</option>
+    <option value="4">Médio</option>
+    <option value="6">Difícil</option>
+    <option value="8">Mortal</option>
+    <option value="10">Insano</option>
   </select>
-
+  
   <label for="Roll20">Roll20:</label>
   <input type="number" id="Roll20" placeholder="Digite um número de 1 a 20">
 
@@ -186,74 +181,85 @@
 
   <script src="main.js"></script>
   <script>
-    function salvarDados() {
-      const ideia = document.getElementById("Ideia");
-      const ambiente = document.getElementById("Ambiente");
-      const dificuldade = parseFloat(document.getElementById("Dificuldade").value);
-      const roll20 = parseInt(document.getElementById("Roll20").value);
-      const lvlJogador = parseInt(document.getElementById("LvlJogador").value);
+function salvarDados() {
+  const ideia = document.getElementById("Ideia");
+  const ambiente = document.getElementById("Ambiente");
+  const dificuldadeBase = parseFloat(document.getElementById("Dificuldade").value);
+  const roll20 = parseInt(document.getElementById("Roll20").value);
+  const lvlJogador = parseInt(document.getElementById("LvlJogador").value);
+
+  const ideiaText = ideia.options[ideia.selectedIndex].text;
+  const ambienteText = ambiente.options[ambiente.selectedIndex].text;
+
+  // 🎲 Interpretação do dado
+  function getRollModifier(roll) {
+  const modifiers = {
+    1: 2.5,
+    2: 1.8,
+    3: 1.7,
+    4: 1.6,
+    5: 1.5,
+    6: 1.3,
+    7: 1.2,
+    8: 1.1,
+    9: 1.0,
+    10: 1.0,
+    11: 1.0,
+    12: 1.0,
+    13: 1.0,
+    14: 0.95,
+    15: 0.9,
+    16: 0.8,
+    17: 0.7,
+    18: 0.6,
+    19: 0.5,
+    20: 0.25
+  };
+
+  return modifiers[roll] || 1.0;
+}
+
+function getRollLabel(roll) {
+  if (roll === 1) return "🎲 Fudeu Crítico";
+  if (roll >= 2 && roll <= 5) return "⚠️ Fudeu";
+  if (roll >= 6 && roll <= 15) return "😐 Okay";
+  if (roll >= 16 && roll <= 19) return "✅ Boa";
+  if (roll === 20) return "🙏 Amém";
+  return "⛔ Valor inválido";
+}
+
+const rollModifier = getRollModifier(roll20);
+const interpretacaoRoll = getRollLabel(roll20);
+
+const dificuldadeFinal = Math.min(Math.round(dificuldadeBase * rollModifier * 100));
+
+  // 💡 Faixa textual da dificuldade
+  let dificuldadeTexto;
+  if (dificuldadeFinal <= 100) {
+    dificuldadeTexto = "😴 Muito Fácil";
+  } else if (dificuldadeFinal <= 300) {
+    dificuldadeTexto = "🟢 Tranquilo";
+  } else if (dificuldadeFinal <= 600) {
+    dificuldadeTexto = "🟡 Desafiador";
+  } else if (dificuldadeFinal <= 850) {
+    dificuldadeTexto = "🔴 Tenso";
+  } else {
+    dificuldadeTexto = "💀 Insanamente Mortal";
+  }
+
+  // Mostrar resultado
+  const resultado = `
+    Ideia: ${ideiaText}
+    \nAmbiente: ${ambienteText}
+    \nNível dos Jogadores: ${lvlJogador}
+    \nRoll20: ${roll20} → ${interpretacaoRoll}
+    \n💥 Dificuldade Final: ${dificuldadeFinal}/2500 → ${dificuldadeTexto}
+  `;
   
-      const ideiaText = ideia.options[ideia.selectedIndex].text;
-      const ambienteText = ambiente.options[ambiente.selectedIndex].text;
-  
-      let interpretacaoRoll, rollFactor;
-      if (roll20 === 1) {
-        interpretacaoRoll = "🎲 Fudeu Crítico";
-        rollFactor = 1;
-      } else if (roll20 >= 2 && roll20 <= 5) {
-        interpretacaoRoll = "⚠️ Fudeu";
-        rollFactor = 0.75;
-      } else if (roll20 >= 6 && roll20 <= 15) {
-        interpretacaoRoll = "😐 Okay";
-        rollFactor = 0.0;
-      } else if (roll20 >= 16 && roll20 <= 19) {
-        interpretacaoRoll = "✅ Boa";
-        rollFactor = -0.25;
-      } else if (roll20 === 20) {
-        interpretacaoRoll = "🙏 Amém";
-        rollFactor = -0.5;
-      } else {
-        interpretacaoRoll = "⛔ Valor inválido";
-        rollFactor = 1;
-      }
-  
-      const dificuldadeFinal = (dificuldade + rollFactor).toFixed(2);
-  
-      let dificuldadeTexto;
-      if (dificuldadeFinal < 0.6) {
-        dificuldadeTexto = "😴 Muito Fácil";
-      } else if (dificuldadeFinal < 1.2) {
-        dificuldadeTexto = "🟢 Tranquilo";
-      } else if (dificuldadeFinal < 1.8) {
-        dificuldadeTexto = "🟡 Desafiador";
-      } else if (dificuldadeFinal < 2.5) {
-        dificuldadeTexto = "🔴 Tenso";
-      } else {
-        dificuldadeTexto = "💀 Mortal";
-      }
-      
-      const variacaoPercentual = Math.random() * 1 - 0.5;
-      const grupoReal = Math.round(lvlJogador + (lvlJogador * variacaoPercentual));
-  
-      const monstros = sugerirMonstros(parseFloat(dificuldadeFinal), ambienteText, lvlJogador, ideiaText);
-  
-      let resultadoTexto = `
-  Ideia: ${ideiaText}
-  Ambiente: ${ambienteText}
-  Dificuldade Base: ${dificuldade}
-  Roll20: ${roll20} → ${interpretacaoRoll}
-  💥 Dificuldade Final: ${dificuldadeFinal} → ${dificuldadeTexto}
-      `;
-  
-      if (monstros.length > 0) {
-        resultadoTexto += `\n👹 Opções de Monstro:\n`;
-        monstros.forEach((m, i) => {
-          const qtd = Math.floor(Math.random() * (m.max - m.min + 1)) + m.min;
-          resultadoTexto += `${i + 1}. ${m.nome} (x${qtd})\n`;
-        });
-      }
-      document.getElementById("resultado").innerText = resultadoTexto;
-    }
+  document.getElementById("resultado").innerText = resultado;
+
+  // Aqui segue o código de sorteio dos monstros...
+}
   </script>
   
 </body>
