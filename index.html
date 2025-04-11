@@ -195,7 +195,6 @@ function salvarDados() {
   const ideiaText = ideia.options[ideia.selectedIndex].text;
   const ambienteText = ambiente.options[ambiente.selectedIndex].text;
 
-  // 🎲 Modificador por valor exato de dado
   function getRollModifier(roll) {
     const modifiers = {
       1: 2.5,
@@ -236,7 +235,6 @@ function salvarDados() {
 
   const dificuldadeFinal = Math.min(Math.round(dificuldadeBase * rollModifier * 100), 2500);
 
-  // 💡 Texto da dificuldade final
   let dificuldadeTexto;
   if (dificuldadeFinal <= 100) {
     dificuldadeTexto = "😴 Ameaça Nula";
@@ -250,7 +248,6 @@ function salvarDados() {
     dificuldadeTexto = "💀 Ameaça Extrema";
   }
 
-  // 🔢 Cálculo da percepção de perigo pelo grupo
   const fatorGrupo = lvlJogador * qtdJogadores * 50;
   const perigoParcial = dificuldadeFinal / (fatorGrupo || 1);
 
@@ -267,24 +264,21 @@ function salvarDados() {
     percepcaoJogador = "☠️ Risco de Extinção";
   }
 
-  // 🎲 Grupo real com variação
   const variacaoPercentual = Math.random() * 1 - 0.5;
   const grupoReal = Math.round(lvlJogador + (lvlJogador * variacaoPercentual));
 
-  // 🧙‍♂️ Buscar monstros (função externa)
   const monstros = sugerirMonstros(parseFloat(dificuldadeFinal), ambienteText, lvlJogador, ideiaText);
 
-  // 📄 Exibir resultado
   let resultadoTexto = `
-Ideia: ${ideiaText}
-Ambiente: ${ambienteText}
-Nível Médio: ${lvlJogador}
-Quantidade de Jogadores: ${qtdJogadores}
-Dificuldade Base: ${dificuldadeBase}
-Roll20: ${roll20} → ${interpretacaoRoll}
-💥 Dificuldade Final: ${dificuldadeFinal}/2500 → ${dificuldadeTexto}
-🧠 Visão do Grupo: ${percepcaoJogador}
-  `;
+    Ideia: ${ideiaText}
+    Ambiente: ${ambienteText}
+    Nível Médio: ${lvlJogador}
+    Quantidade de Jogadores: ${qtdJogadores}
+    Dificuldade Base: ${dificuldadeBase}
+    Roll20: ${roll20} → ${interpretacaoRoll}
+    💥 Dificuldade Final: ${dificuldadeFinal}/2500 → ${dificuldadeTexto}
+    🧠 Visão do Grupo: ${percepcaoJogador}
+    `;
 
   if (monstros.length > 0) {
     resultadoTexto += `\n👹 Opções de Monstro:\n`;
